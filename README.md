@@ -26,7 +26,7 @@ alert'.
 - Audio output ( using syscall 33 to output an audio via MIDI )
 
 ## Program Flowchart
-![alt text](https://i.ibb.co/fQ2CycH/program-flow-drawio.png)
+![alt text](https://i.ibb.co/9v0Sqs7/program-flow-drawio-1.png)
 
 
 ## Demo
