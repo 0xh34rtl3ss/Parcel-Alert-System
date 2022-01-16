@@ -11,17 +11,17 @@
 
 ## Disclaimer
 
-- this is only a simulation and a working proof of concept for our project title 'Parcel delivery
+- This is only a simulation and a working proof of concept for our project title 'Parcel delivery
 alert'.
-- this system and the devices are meant to be implement/install in the US neighborhood area.
+- This system and the devices are meant to be implement/install in the US neighborhood area.
 - No SMS are sent during this simulation
 - "Camera click" is to simulate the camera is taking a photo.
 
 ## Features
-- file as input stream (reading from txt file. to simulate implementation of API request from e-commerce platform eg: get user orders that contains parcel barcode number, recipient name, and courier etc. from Shopee API and store the info locally in the program )
+- File as input stream (reading from txt file. to simulate implementation of API request from e-commerce platform eg: get user orders that contains parcel barcode number, recipient name, and courier etc. from Shopee API and store the info locally in the program )
 - Use macro to simplify the source code and reduce redundancy 
-- barcode validation with database (memory)
-- error handling (tell user the error and how to mitigate that error)
+- Barcode validation with database (to make sure that the )
+- Error handling (tell user the error and how to mitigate that error)
 - Audio output ( using syscall 33 to output an audio via MIDI )
 
 ## Program Flowchart
