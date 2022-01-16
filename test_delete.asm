@@ -5,20 +5,20 @@
 	Parcel3: .space 256
 	Parcel4: .space 256
 	userBarcode: .space 11
-	Userfile: .asciiz "C:/Users/Public/UserData.txt"
+	Userfile: .asciiz "C:/Users/SIRIUS/Desktop/CAAL/Project/UserData.txt"
 	welcome: .asciiz "SIMULATION OF PARCEL HOME ALERT SYSTEM\n*****System Initialization*****"
-	wrong_inputChar: .asciiz "\nWrong input,make sure your character is either 'Y' or 'N'"
+	wrong_inputChar: .asciiz "\n[Error: Wrong input. make sure your character is either 'Y' or 'N']"
 	doContinue: .asciiz "\n1)Owner availibility in the house(y/n): "  
 	welcomeMessage: .asciiz "\n\n\n*******************************************\nHi! Welcome to Parcel Delivery Alert System\n"
+	File_Error: .asciiz "\n[Error: cannot find and open the file. please check your file directory]"
 	inHouse_msg: .asciiz           "        Owner is in the house :)\n"
 	outHouse_msg: .asciiz          "       Owner is NOT in the house :(\n"
 	promptMessage: .asciiz "Please enter the barcode: "
-	wrongInput_msg: .asciiz "*****Wrong input!*****\n"
 	nextLine: .asciiz "\n"
 	barcodeExist_msg: .asciiz "Barcode is in the database\n"
 	barcodeDNE_msg: .asciiz "Sorry, barcode is not in the database \n"
 	received: .asciiz "\nPlease enter 'R' below upon receiving your parcel: "
-	img_saved: .asciiz "img.png"
+	img_saved: .asciiz "img.jpeg"
 	parcel_message: .asciiz "\nPlease display the parcel at the screen in the next 10 seconds. Thank You\n\n"
 	camera_active: .asciiz "Camera will be activated in:\n"
 	click: .asciiz "**click**\n\n"
@@ -57,9 +57,23 @@
 	syscall
 .end_macro
 
-#macro to update databse after order recieved
+#macro to update databse [by saving im.jpeg into memery address of particular PArcel info]
 .macro updateDatabase(%parcel)
-nop 
+li $t1,0
+li $t2,64
+move $t3,%parcel
+add $t3,$t3,64 
+
+	saveAgain:
+	beq $t0,'\n',end
+	lb, $t0,img_saved($t1)
+	sb $t0,($t3)
+	addi $t1,$t1,1
+	addi $t3,$t3,1
+	j saveAgain
+
+end:
+printText(database_updated)
 .end_macro
 
 #macro to exit/terminate program
@@ -137,10 +151,16 @@ j Readfile
 
 AskAgain:
 	printText(wrong_inputChar)#"\nWrong input,make sure your character is either 'Y' or 'N'"
+	printText(nextLine)
+	printText(doContinue)
 	li $v0,12
 	syscall
 	j ValidateYesNo
-    
+	
+fileError:
+   printText(File_Error)
+   exitProgram()
+   
 
 Readfile:
 	#open file
@@ -149,6 +169,8 @@ Readfile:
 	li $a1, 0 #mode 0->for read-only
 	li $t4,0 #counter for reading file
 	syscall
+	
+	beq $v0,-1,fileError
 	
 	move $s0,$v0 
 	li $s3,0
@@ -242,7 +264,8 @@ main:
     j barcodeValidationWithDB
     
     check_for_char:
-    	bge  $t2, 58, main
+    	bge $t2, 58, main
+    	blt $t2,48,main
     	beq $t0, 0, check_zero
     	beq $t0, 7, check_zero
     	jr $ra
@@ -307,69 +330,81 @@ Check_availability:
 	beq $s7, 'N',CameraActivation
 	beq $s7, 'n',CameraActivation
 	
-Play_bell:
-
-	#display parcel information
-	li $v0,4
-	move $a0,$s5
-	syscall
-	
-	#play the ding sound (syscall 33)
-	playMIDI(90,600,120)
-	
-	#play the dong sound (sycall 33)
-	playMIDI(70,700,120)
-	
-	j Order_received
+ Play_bell:
+    #display parcel information
+    li $v0,4
+    move $a0,$s5
+    syscall
+    
+    #play the ding sound (syscall 33)
+    playMIDI(90,600,120)
+    
+    #play the dong sound (sycall 33)
+    playMIDI(70,700,120)
+    
+    j Order_received
 #####CHECK AVAILIBILITY OF OWNER -end
 
 
 #label to ask the user to confirm that they have received the parcel
 Order_received:
-	#timer (30 sec)  before prompting the received message
-	#to allow the user to answer the bell and collect the parcel
-	sleep(3000)#original=30000
-	#Prompt to ask the user to enter 'R' upon receiving parcel
-	
-AskAgain:
-	printText(received)
-	#get user input (character)
-	li $v0, 12
-	syscall
-	
-	addi $t2, $v0, 0
-	beq $t2, 'R', updateAndExit
-	beq $t2, 'r', updateAndExit
-	j AskAgain
-	
+    	#timer (30 sec)  before prompting the received message
+    	#to allow the user to answer the bell and collect the parcel
+    	sleep(3000)#original=30000
+
+askAgain:
+    #Prompt to ask the user to enter 'R' upon receiving parcel
+    printText(received)
+    #get user input (character)
+    li $v0, 12
+    syscall
+    
+    #once the owner enters 'r' | 'R' (in device its a button)
+    #branch into update label
+    beq $v0, 'R', updateAndExit
+    beq $v0, 'r', updateAndExit
+    j askAgain
+
 updateAndExit:
 	updateDatabase($s5)
 	exitProgram()
 
+# Label to instruct the courier to place the parcel on the screen for a photo to be taken as proof of delivery 
+# When owner is not in the house 
 CameraActivation:
 
-	li $s0, 10
-	# Display a message to the courier instructing them to place the parcel on the screen for a photo to be taken as proof of delivery
-	printText(parcel_message)
-	sleep(5000)
-	printText(camera_active)
-	sleep(1500)
+    #display parcel information
+    li $v0,4
+    move $a0,$s5
+    syscall
+    
+    # Store value '10' in register $s0
+    li $s0, 10
+    # Display message
+    printText(parcel_message)
+    
+    sleep(5000)# Delay (5 sec)
+    printText(camera_active)# Display message indicating that the camera will be activated
+    sleep(1500) # Delay (1.5 sec)
 
-	
-# Timer
-	
-loop:
-	blt $s0, 0, exit
-	li $v0, 1
-	move $a0, $s0
-	syscall
-	sleep(1000)
-	printText(nextLine)
-	sub $s0, $s0, 1
-	j loop
-	
+    
+# Timer Label
+loop:    
+    # Exit loop when value in $s0 is less than 0
+    blt $s0, 0, exit
+    li $v0, 1
+    move $a0, $s0
+    syscall
+    sleep(1000) # Delay (1 sec)
+    printText(nextLine)
+    
+    # Decrement / Subtract contents in register $s0 with 1
+    sub $s0, $s0, 1
+    j loop
+    
 exit:
-	printText(click)
-	sleep(1500)
-	printText(text_message)
-	exitProgram()
+    printText(click)
+    sleep(1500)# Delay (1.5 sec)
+    printText(text_message) # Display message that the photo taken has been saved and an SMS will be sent to the owner as proof of delivery
+    updateDatabase($s5)
+    exitProgram()
