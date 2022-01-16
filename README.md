@@ -20,9 +20,9 @@ alert'.
 ## Features
 - File as input stream (reading from txt file. to simulate implementation of API request from e-commerce platform eg: get user orders that contains parcel barcode number, recipient name, and courier etc. from Shopee API and store the info locally in the program )
 - Use macro to simplify the source code and reduce redundancy 
-- Barcode validation with database (to make sure that the )
+- Barcode validation with database (to make sure that the user input is in the correct format as the barcode in the memory eg: no characters, no '0' at the fron or at the end)
 - User input validation for every user input
-- Error handling (tell user the error and how to mitigate that error)
+- Error handling (tell user the error and how to solve that error) eg: file cannot be open, change directory
 - Audio output ( using syscall 33 to output an audio via MIDI )
 
 ## Program Flowchart
