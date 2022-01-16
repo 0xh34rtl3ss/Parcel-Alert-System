@@ -33,12 +33,12 @@ alert'.
 [![N|Solid](https://images.squarespace-cdn.com/content/v1/5f3a60f80638305e031c31bd/1631161685918-FVHK4FVDGGVZVZEV47XO/youtube+logo.png)](https://www.youtube.com/watch?v=6o1JeI5yXxI)
 
 ## Installation
-1) clone this repo 
+1) Clone this repo 
 2) Open the .asm file via MARS
-3) edit the directory in the "Userfile" data section with your path to "UserData.txt"
+3) Edit the directory in the "Userfile" data section with your path to "UserData.txt"
 Example:
 ```assembly
 Userfile: .asciiz "C:/Users/SIRIUS/Desktop/CAAL/Project/UserData.txt"
 ```
-4) save, assemble and run the code.
+4) Save, assemble and run the code.
 
