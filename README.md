@@ -34,4 +34,11 @@ alert'.
 
 ## Installation
 1) clone this repo 
-2) 
+2) Open the .asm file via MARS
+3) edit the directory in the "Userfile" data section with your path to "UserData.txt"
+Example:
+```assembly
+Userfile: .asciiz "C:/Users/SIRIUS/Desktop/CAAL/Project/UserData.txt"
+```
+4) save, assemble and run the code.
+
