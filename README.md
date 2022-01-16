@@ -19,6 +19,7 @@ alert'.
 
 ## Features
 - file as input stream (reading from txt file. to simulate implementation of API request from e-commerce platform eg: get user orders that contains parcel barcode number, recipient name, and courier etc. from Shopee API and store the info locally in the program )
+- Use macro to simplify the source code and reduce redundancy 
 - barcode validation with database (memory)
 - error handling (tell user the error and how to mitigate that error)
 - Audio output ( using syscall 33 to output an audio via MIDI )
