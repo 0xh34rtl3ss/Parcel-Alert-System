@@ -14,14 +14,14 @@
 - This is only a simulation and a working proof of concept for our project title 'Parcel delivery
 alert'.
 - This system and the devices are meant to be implement/install in the US neighborhood area.
-- For the purpose of simulation, this program strictly only read 4 barcode values from the file seperated by '\n'.
+- For the purpose of simulation, this program strictly only read 4 barcode values from the file separated by '\n'.
 - No SMS are sent during this simulation
 - "Camera click" is to simulate the camera is taking a photo.
 
 ## Features
 - File as input stream (reading from txt file. to simulate implementation of API request from e-commerce platform eg: get user orders that contains parcel barcode number, recipient name, and courier etc. from Shopee API and store the info locally in the program )
 - Use macro to simplify the source code and reduce redundancy 
-- Barcode validation with database (to make sure that the user input is in the correct format as the barcode in the memory eg: no characters, no '0' at the fron or at the end)
+- Barcode validation (to make sure that the user input is in the correct format as the barcode in the memory eg: no characters, no '0' at the front or at the end)
 - User input validation for every user input
 - Error handling (tell user the error and how to solve that error) eg: file cannot be open, change directory
 - Audio output ( using syscall 33 to output an audio via MIDI )
