@@ -413,7 +413,9 @@ loop:
 exit:
     printText(click)
     sleep(1500)# Delay (1.5 sec)
-    printText(text_message) # Display message that the photo taken has been saved and an SMS will be sent to the owner as proof of delivery
+    # Display message that the photo taken has been saved 
+    # and an SMS will be sent to the owner as proof of delivery
+    printText(text_message) 
     updateDatabase($s5)
     exitProgram()
     
