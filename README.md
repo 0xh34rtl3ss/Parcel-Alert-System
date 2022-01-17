@@ -14,6 +14,7 @@
 - This is only a simulation and a working proof of concept for our project title 'Parcel delivery
 alert'.
 - This system and the devices are meant to be implement/install in the US neighborhood area.
+- For the purpose of simulation, this program strictly only read 4 barcode values from the file seperated by '\n'.
 - No SMS are sent during this simulation
 - "Camera click" is to simulate the camera is taking a photo.
 
